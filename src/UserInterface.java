@@ -111,6 +111,8 @@ public class UserInterface {
 
         application.createNewAnimal(name,description,type,age);
 
+        // When created a new animal, show the list again
+        list();
     }
 
     private void delete() {
@@ -128,13 +130,16 @@ public class UserInterface {
     }
 
     private void load() {
-        System.out.println("-- loading database not implemented --");
+        System.out.println("Loading the database ...");
+        application.loadDatabase();
+        System.out.println("Done!");
     }
 
     private void save() {
-        System.out.println("-- saving database not implemented --");
+        System.out.println("Saving the database ...");
+        application.saveDatabase();
+        System.out.println("Saving database completed succesfully");
+        System.out.println("You can now exit the application");
     }
-
-
 
 }

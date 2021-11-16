@@ -37,6 +37,8 @@ public class AnimalBase {
         Animal animal = findAnimalByName(name);
         if(animal == null) {
             throw new NonExistingAnimalException();
+        } else {
+            animals.remove(animal);
         }
     }
 
@@ -47,6 +49,15 @@ public class AnimalBase {
             }
         }
         return null;
+    }
+
+
+    public void loadDatabase() {
+        System.err.println("LOAD not yet implemented!");
+    }
+
+    public void saveDatabase() {
+        System.err.println("SAVE not yet implemented!");
     }
 
 }

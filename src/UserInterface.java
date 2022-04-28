@@ -10,11 +10,11 @@ public class UserInterface {
     }
 
     public void start() {
-        System.out.println("Welcome to ANIMALBASE 2021");
+        System.out.println("Welcome to ANIMALBASE 2022");
         System.out.println("==========================");
         System.out.println("Java edition\n");
 
-        while(true) {
+        while (true) {
             switch (mainMenu()) {
                 case 0 -> exit();
                 case 1 -> list();
@@ -39,12 +39,12 @@ public class UserInterface {
                 5) Delete animal
                 6) Load animals from file
                 7) Save animals to file
-                
+                                
                 0) Exit application
                 """);
         Scanner input = new Scanner(System.in);
         int choice = input.nextInt();
-        while(choice < 0 || choice > 7) {
+        while (choice < 0 || choice > 7) {
             System.out.println("Only values 0-7 allowed");
             choice = input.nextInt();
         }
@@ -53,17 +53,20 @@ public class UserInterface {
     }
 
     private void exit() {
-        System.out.println("Thank you for using ANIMALBASE 2021");
-        System.out.println("Please consider subscribing!");
+        // TODO: Maybe save before exiting???
+        System.out.println("Thank you for using ANIMALBASE 2022");
+        System.out.println("Please consider upgrading to Enterprise Edition!");
+        System.out.println("Subscribe to our newsletter with all the details you need about creating lists of animals!");
         System.exit(0);
     }
 
     private void list() {
         System.out.println("List of all the animals");
         System.out.println("-----------------------");
-        for( Animal animal : application.getAllAnimals() ) {
+        for (Animal animal : application.getAllAnimals()) {
             System.out.println(animal);
         }
+        System.out.println("There are " + application.getAnimalCount() + " animals in the list.");
     }
 
     private void filter() {
@@ -76,11 +79,12 @@ public class UserInterface {
                 n) Name
                 t) Type
                 a) Age
+                w) Weight
                 """);
         Scanner input = new Scanner(System.in);
         char sortBy = input.next().trim().toLowerCase().charAt(0);
-        while(sortBy != 'n' && sortBy != 't' && sortBy != 'a') {
-            System.out.println("Please type 'n', 't' or 'a'");
+        while (sortBy != 'n' && sortBy != 't' && sortBy != 'a' && sortBy != 'w') {
+            System.out.println("Please type 'n', 't', 'a' or 'w'");
             sortBy = input.next().trim().toLowerCase().charAt(0);
         }
 
@@ -92,28 +96,24 @@ public class UserInterface {
                 """);
 
         char ch = input.next().trim().toLowerCase().charAt(0);
-        while(ch != 'a' && ch != 'd' && ch != 't') {
+        while (ch != 'a' && ch != 'd' && ch != 't') {
             System.out.println("Please type 'a', 'd' or 't'");
             ch = input.next().trim().toLowerCase().charAt(0);
         }
 
-        String direction = ch=='a'?"ASC":(ch=='d'?"DESC":"TOGGLE");
+        SortDirection direction = switch (ch) {
+            case 'a' -> SortDirection.ASC;
+            case 'd' -> SortDirection.DESC;
+            case 't' -> SortDirection.TOGGLE;
+            default -> SortDirection.ASC;
+        };
 
-        if(ch == 'n') {
+        if (sortBy == 'n') {
             application.sortBy("name", direction);
-        } else if(ch == 't') {
+        } else if (sortBy == 't') {
             application.sortBy("type", direction);
-        } else if(ch == 'a') {
+        } else if (sortBy == 'a') {
             application.sortBy("age", direction);
-        }
-
-
-        if(sortBy == 'n') {
-            application.sortBy("name");
-        } else if(sortBy == 't') {
-            application.sortBy("type");
-        } else if(sortBy == 'a') {
-            application.sortBy("age");
         }
 
         // When sorted, show the list again
@@ -131,9 +131,12 @@ public class UserInterface {
         String type = input.nextLine();
         System.out.print("Age: ");
         int age = input.nextInt();
-        input.nextLine();
+        input.nextLine(); // ScannerBug fix
+        System.out.print("Weight (kg): ");
+        double weight = input.nextDouble();
+        input.nextLine(); // ScannerBug fix
 
-        application.createNewAnimal(name,description,type,age);
+        application.createNewAnimal(name, description, type, age, weight);
 
         // When created a new animal, show the list again
         list();
@@ -145,11 +148,12 @@ public class UserInterface {
         System.out.println("Please enter the name of the animal to be deleted: ");
         Scanner input = new Scanner(System.in);
         String name = input.nextLine();
-        try {
-            application.deleteAnimal(name);
-            System.out.println("The animal with name '"+name+"' has been deleted");
-        } catch (NonExistingAnimalException exception) {
-            System.out.println("Animal with name '"+name+"' does not exist, and cannot be deleted");
+
+        boolean success = application.deleteAnimal(name);
+        if (success) {
+            System.out.println("The animal with name '" + name + "' has been deleted");
+        } else {
+            System.out.println("Animal with name '" + name + "' does not exist, and cannot be deleted");
         }
     }
 

@@ -22,23 +22,28 @@ public class AnimalBase {
         return animals;
     }
 
-    public void sortBy(String sort) {
-        // TODO: Implement sorting!
-        System.out.println("TODO: Sort the list of animals by: " + sort);
+    public int getAnimalCount() {
+        return animals.size();
     }
 
-    public void createNewAnimal(String name, String description, String type, int age) {
-        Animal animal = new Animal(name,description,type,age);
+    public void sortBy(String sortBy, SortDirection sortDirection) {
+        // TODO: Implement sorting!
+        System.out.println("TODO: Sort the list of animals by: " + sortBy);
+    }
+
+    public void createNewAnimal(String name, String description, String type, int age, double weight) {
+        Animal animal = new Animal(name,description,type,age,weight);
         animals.add(animal);
     }
 
-    public void deleteAnimal(String name) throws NonExistingAnimalException {
+    public boolean deleteAnimal(String name) {
         // find animal with this name
         Animal animal = findAnimalByName(name);
         if(animal == null) {
-            throw new NonExistingAnimalException();
+            return false;
         } else {
             animals.remove(animal);
+            return true;
         }
     }
 

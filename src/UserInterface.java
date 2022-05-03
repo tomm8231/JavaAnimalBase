@@ -10,7 +10,7 @@ public class UserInterface {
         this.application = application;
     }
 
-    public void start() throws FileNotFoundException {
+    public void start() {
         System.out.println("Welcome to ANIMALBASE 2022");
         System.out.println("==========================");
         System.out.println("Java edition\n");
@@ -115,6 +115,8 @@ public class UserInterface {
             application.sortBy("type", direction);
         } else if (sortBy == 'a') {
             application.sortBy("age", direction);
+        } else if (sortBy == 'w') {
+            application.sortBy("weight", direction);
         }
 
         // When sorted, show the list again
@@ -158,13 +160,13 @@ public class UserInterface {
         }
     }
 
-    private void load() throws FileNotFoundException {
+    private void load() {
         System.out.println("Loading the database ...");
         application.loadDatabase();
         System.out.println("Done!");
     }
 
-    private void save() throws FileNotFoundException {
+    private void save() {
         System.out.println("Saving the database ...");
         application.saveDatabase();
         System.out.println("Saving database completed succesfully");

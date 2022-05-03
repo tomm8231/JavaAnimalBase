@@ -1,5 +1,9 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class AnimalBase {
 
@@ -9,12 +13,12 @@ public class AnimalBase {
         animals = new ArrayList<>();
     }
 
-    public void start() throws FileNotFoundException {
+    public void start() {
         UserInterface ui = new UserInterface(this);
         ui.start();
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         AnimalBase app = new AnimalBase();
         app.start();
     }
@@ -29,6 +33,23 @@ public class AnimalBase {
 
     public void sortBy(String sortBy, SortDirection sortDirection) {
         // TODO: Implement sorting!
+
+        Comparator comparator = null;
+
+        if (sortBy.equals("age")) {
+            comparator = new AgeComparator(sortDirection);
+            Collections.sort(animals, comparator);
+        } else if (sortBy.equals("name")) {
+            comparator = new NameComparator(sortDirection);
+            Collections.sort(animals, comparator);
+        } else if (sortBy.equals("type")) {
+            comparator = new TypeComparator(sortDirection);
+            Collections.sort(animals, comparator);
+        } else if (sortBy.equals("weight")) {
+            comparator = new WeightComparator(sortDirection);
+            Collections.sort(animals, comparator);
+        }
+
         System.out.println("TODO: Sort the list of animals by: " + sortBy);
     }
 
@@ -57,7 +78,7 @@ public class AnimalBase {
         return null;
     }
 
-    public void loadDatabase() throws FileNotFoundException {
+    public void loadDatabase()  {
 
         FileHandler fileHandler = new FileHandler();
         animals.addAll(fileHandler.loadAnimalsFromFile());
@@ -65,9 +86,15 @@ public class AnimalBase {
         //animals = fileHandler.loadDatabase();
     }
 
-    public void saveDatabase() throws FileNotFoundException {
-        FileHandler fileHandler = new FileHandler();
-        fileHandler.saveAnimalsToFile(animals);
+    public void saveDatabase() {
+
+        try {
+            FileHandler fileHandler = new FileHandler();
+            fileHandler.saveAnimalsToFile(animals);
+        } catch (FileNotFoundException exception) {
+            System.err.println("Could not save file");
+        }
+
     }
 
 

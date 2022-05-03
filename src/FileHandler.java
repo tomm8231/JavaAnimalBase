@@ -9,27 +9,33 @@ public class FileHandler {
 
   private String fileName = "animals.csv";
 
-  public ArrayList<Animal> loadAnimalsFromFile() throws FileNotFoundException {
+  public ArrayList<Animal> loadAnimalsFromFile() {
 
     ArrayList<Animal> animals = new ArrayList<>();
 
-    Scanner fileScanner = new Scanner(new File(fileName));
+    try {
 
-    while(fileScanner.hasNextLine()) {
-      String line = fileScanner.nextLine();
+      Scanner fileScanner = new Scanner(new File(fileName));
 
-    Animal animal = readAnimal(line);
-      //Tilføj det til listen af objekter:
-      animals.add(animal);
+      while (fileScanner.hasNextLine()) {
+        String line = fileScanner.nextLine();
 
+        Animal animal = readAnimal(line);
+        //Tilføj det til listen af objekter:
+        animals.add(animal);
+      }
+
+    } catch (FileNotFoundException exception) {
+      System.err.println("File not found");
     }
+
     return animals;
 
   }
 
   public Animal readAnimal(String line) {
     //Åbn scanner der læser fra csv-fil:
-    Scanner lineScanner = new Scanner (line).useDelimiter(";").useLocale(Locale.ENGLISH);
+    Scanner lineScanner = new Scanner(line).useDelimiter(";").useLocale(Locale.ENGLISH);
 
     //Træk variablerne ud i rækkefølgen, de var skrevet
     String name = lineScanner.next();
@@ -39,12 +45,13 @@ public class FileHandler {
     double weight = lineScanner.nextDouble();
 
     //Opret et nyt objekt med ovenstående variabler:
-    Animal animal = new Animal(name,desc,type,age,weight);
+    Animal animal = new Animal(name, desc, type, age, weight);
     return animal;
   }
 
   public void saveAnimalsToFile(ArrayList<Animal> animals) throws FileNotFoundException {
     //Åbn en PrintStream der skriver til filen:
+
     PrintStream outputFile = new PrintStream(new File(fileName));
 
     //For hvert objekt i listen:
